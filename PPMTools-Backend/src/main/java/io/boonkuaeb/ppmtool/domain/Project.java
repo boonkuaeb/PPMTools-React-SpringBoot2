@@ -1,7 +1,6 @@
 package io.boonkuaeb.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -21,7 +20,7 @@ public class Project {
     @NotBlank(message = "Project Identifier is required")
     @Size(min = 4, max = 6, message = "Please use 4 to 6 characters")
     @Column(updatable = false, unique = true)
-    private String projectIdentifier;
+    private String projectCode;
 
     @NotBlank(message = "Project description is required")
     private String description;
@@ -54,12 +53,12 @@ public class Project {
         this.projectName = projectName;
     }
 
-    public String getProjectIdentifier() {
-        return projectIdentifier;
+    public String getProjectCode() {
+        return projectCode;
     }
 
-    public void setProjectIdentifier(String projectIdentifier) {
-        this.projectIdentifier = projectIdentifier;
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
     }
 
     public String getDescription() {
