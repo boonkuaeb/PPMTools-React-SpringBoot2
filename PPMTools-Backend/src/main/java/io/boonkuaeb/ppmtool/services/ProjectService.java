@@ -6,6 +6,8 @@ import io.boonkuaeb.ppmtool.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProjectService {
 
@@ -47,5 +49,15 @@ public class ProjectService {
             throw new ProjectCodeException("Project Code '" + projectCode.toUpperCase() + "' doesn't exists");
         }
         projectRepository.delete(project);
+    }
+
+    public Project updateProject(Project project)
+    {
+        Optional<Project> projectOptional = projectRepository.findById(project.getId());
+        if (!projectOptional.isPresent())
+        {
+            throw new ProjectCodeException("Project  doesn't exists");
+        }
+        return this.saveOrUpdateProject(project);
     }
 }

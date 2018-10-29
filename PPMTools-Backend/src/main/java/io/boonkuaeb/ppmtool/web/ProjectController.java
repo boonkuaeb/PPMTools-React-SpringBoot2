@@ -1,6 +1,7 @@
 package io.boonkuaeb.ppmtool.web;
 
 import io.boonkuaeb.ppmtool.domain.Project;
+import io.boonkuaeb.ppmtool.exceptions.ProjectCodeException;
 import io.boonkuaeb.ppmtool.services.MapValidationErrorServices;
 import io.boonkuaeb.ppmtool.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,21 +36,28 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectCode}")
-    public ResponseEntity<?> getProjectByCode(@PathVariable String projectCode)
-    {
+    public ResponseEntity<?> getProjectByCode(@PathVariable String projectCode) {
         Project project = projectService.findByProjectCode(projectCode);
         return new ResponseEntity<Project>(project, HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public Iterable<?> getAllProject(){
+    public Iterable<?> getAllProject() {
         return projectService.findProjects();
     }
 
     @DeleteMapping("/{projectCode}")
-    public ResponseEntity<?> deleteProjectByCode(@PathVariable String projectCode)
-    {
+    public ResponseEntity<?> deleteProjectByCode(@PathVariable String projectCode) {
         projectService.deleteByProjectCode(projectCode);
-        return new ResponseEntity<String>("Project Code '"+projectCode.toUpperCase()+"' was deleted", HttpStatus.OK);
+        return new ResponseEntity<String>("Project Code '" + projectCode.toUpperCase() + "' was deleted", HttpStatus.OK);
+    }
+
+    @PutMapping("")
+    public ResponseEntity<?> updateProject(@Valid @RequestBody Project project, BindingResult result) {
+        ResponseEntity<?> errorMap = mapValidationErrorServices.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+
+        Project updateProject = projectService.updateProject(project);
+        return new ResponseEntity<>(updateProject, HttpStatus.OK);
     }
 }
